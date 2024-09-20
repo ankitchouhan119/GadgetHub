@@ -27,8 +27,10 @@ import {
 } from '../constants/userConstants'
 import { ORDER_LIST_MY_RESET } from '../constants/orderConstants'
 
-const API = axios.create({baseURL: process.env.REACT_APP_PROD_API_BASE})
+// Using axios instance with base URL from environment variable
+const API = axios.create({ baseURL: process.env.REACT_APP_PROD_API_BASE })
 
+// Login action
 export const login = (email, password) => async (dispatch) => {
   try {
     dispatch({
@@ -42,7 +44,7 @@ export const login = (email, password) => async (dispatch) => {
     }
 
     const { data } = await API.post(
-      '/api/users/login',
+      '/api/users/login', // Ensure this is a POST request
       { email, password },
       config
     )
@@ -64,6 +66,7 @@ export const login = (email, password) => async (dispatch) => {
   }
 }
 
+// Logout action
 export const logout = () => (dispatch) => {
   localStorage.removeItem('userInfo')
   localStorage.removeItem('cartItems')
@@ -76,6 +79,7 @@ export const logout = () => (dispatch) => {
   document.location.href = '/login'
 }
 
+// Register action
 export const register = (name, email, password) => async (dispatch) => {
   try {
     dispatch({
@@ -88,7 +92,7 @@ export const register = (name, email, password) => async (dispatch) => {
       },
     }
 
-    const { data } = await axios.post(
+    const { data } = await API.post(
       '/api/users',
       { name, email, password },
       config
@@ -116,6 +120,7 @@ export const register = (name, email, password) => async (dispatch) => {
   }
 }
 
+// Get user details action
 export const getUserDetails = (id) => async (dispatch, getState) => {
   try {
     dispatch({
@@ -132,7 +137,7 @@ export const getUserDetails = (id) => async (dispatch, getState) => {
       },
     }
 
-    const { data } = await axios.get(`/api/users/${id}`, config)
+    const { data } = await API.get(`/api/users/${id}`, config)
 
     dispatch({
       type: USER_DETAILS_SUCCESS,
@@ -153,6 +158,7 @@ export const getUserDetails = (id) => async (dispatch, getState) => {
   }
 }
 
+// Update user profile action
 export const updateUserProfile = (user) => async (dispatch, getState) => {
   try {
     dispatch({
@@ -170,16 +176,18 @@ export const updateUserProfile = (user) => async (dispatch, getState) => {
       },
     }
 
-    const { data } = await axios.put(`/api/users/profile`, user, config)
+    const { data } = await API.put(`/api/users/profile`, user, config)
 
     dispatch({
       type: USER_UPDATE_PROFILE_SUCCESS,
       payload: data,
     })
+
     dispatch({
       type: USER_LOGIN_SUCCESS,
       payload: data,
     })
+
     localStorage.setItem('userInfo', JSON.stringify(data))
   } catch (error) {
     const message =
@@ -196,6 +204,7 @@ export const updateUserProfile = (user) => async (dispatch, getState) => {
   }
 }
 
+// List all users (admin access)
 export const listUsers = () => async (dispatch, getState) => {
   try {
     dispatch({
@@ -212,7 +221,7 @@ export const listUsers = () => async (dispatch, getState) => {
       },
     }
 
-    const { data } = await axios.get(`/api/users`, config)
+    const { data } = await API.get(`/api/users`, config)
 
     dispatch({
       type: USER_LIST_SUCCESS,
@@ -233,6 +242,7 @@ export const listUsers = () => async (dispatch, getState) => {
   }
 }
 
+// Delete user (admin access)
 export const deleteUser = (id) => async (dispatch, getState) => {
   try {
     dispatch({
@@ -249,7 +259,7 @@ export const deleteUser = (id) => async (dispatch, getState) => {
       },
     }
 
-    await axios.delete(`/api/users/${id}`, config)
+    await API.delete(`/api/users/${id}`, config)
 
     dispatch({ type: USER_DELETE_SUCCESS })
   } catch (error) {
@@ -267,6 +277,7 @@ export const deleteUser = (id) => async (dispatch, getState) => {
   }
 }
 
+// Update user (admin access)
 export const updateUser = (user) => async (dispatch, getState) => {
   try {
     dispatch({
@@ -284,7 +295,7 @@ export const updateUser = (user) => async (dispatch, getState) => {
       },
     }
 
-    const { data } = await axios.put(`/api/users/${user._id}`, user, config)
+    const { data } = await API.put(`/api/users/${user._id}`, user, config)
 
     dispatch({ type: USER_UPDATE_SUCCESS })
 
