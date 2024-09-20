@@ -1,4 +1,4 @@
-# ProShop eCommerce Platform
+# GadgetHub eCommerce Platform
 
 > eCommerce platform built with the MERN stack & Redux.
 > Deployed via CICD (circleci) Frontend(s3 bucket) & Backend (ec2 Instance) with CloudFormation(Infrastructure Provisioning), Ansible (Server Configuration)
